@@ -12,7 +12,7 @@ on-docker:
 	sudo systemctl start docker
 
 use-docker:
-	ls -lah
+	docker run --rm -p 80:80 --name server -t ivanbir/barsev
 
 build-docker:
 	docker build -t server .
