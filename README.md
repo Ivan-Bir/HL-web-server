@@ -36,6 +36,7 @@
 RPS_serv/RPS_nginx = **1.01**
 
 ### Сервер
+```
 Server Software:        server
 Server Hostname:        127.0.0.1
 Server Port:            80
@@ -49,10 +50,10 @@ Complete requests:      10000
 Failed requests:        0
 Total transferred:      9549280000 bytes
 HTML transferred:       9548240000 bytes
-Requests per second:    **1862.87** [#/sec] (mean)
+Requests per second:    1862.87 [#/sec] (mean)
 Time per request:       5.368 [ms] (mean)
 Time per request:       0.537 [ms] (mean, across all concurrent requests)
-Transfer rate:          **1737211.69** [Kbytes/sec] received
+Transfer rate:          1737211.69 [Kbytes/sec] received
 
 Connection Times (ms)
               min  mean[+/-sd] median   max
@@ -71,9 +72,10 @@ Percentage of the requests served within a certain time (ms)
   98%      7
   99%      8
  100%     42 (longest request)
-
+```
 
 ### Nginx
+```
 Server Software:        nginx/1.23.3
 Server Hostname:        127.0.0.1
 Server Port:            8000
@@ -87,10 +89,10 @@ Complete requests:      10000
 Failed requests:        0
 Total transferred:      9550620000 bytes
 HTML transferred:       9548240000 bytes
-Requests per second:    **1843.89** [#/sec] (mean)
+Requests per second:    1843.89 [#/sec] (mean)
 Time per request:       5.423 [ms] (mean)
 Time per request:       0.542 [ms] (mean, across all concurrent requests)
-Transfer rate:          **1719757.37** [Kbytes/sec] received
+Transfer rate:          1719757.37 [Kbytes/sec] received
 
 Connection Times (ms)
               min  mean[+/-sd] median   max
@@ -109,3 +111,4 @@ Percentage of the requests served within a certain time (ms)
   98%      9
   99%     11
  100%     29 (longest request)
+```
