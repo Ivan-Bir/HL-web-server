@@ -415,6 +415,7 @@ int main() {
         return -1;
     }
 
+    printf("Count workers %d...\n", cfg.cpu_limit);
     printf("Running on port %d...\n", cfg.port);
     for (int i = 0; i < cfg.cpu_limit; ++i) {
         int pid = fork();
