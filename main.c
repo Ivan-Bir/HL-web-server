@@ -17,6 +17,7 @@
 #define MAX_BUFFER_SIZE 1024
 #define MAX_LINE_LENGTH 1024
 #define MAX_PATH_LENGTH 1024
+#define SMALL_BUFF_SIZE 100
 
 #define CONF_PARAM_CPU "cpu_limit"
 #define CONF_PARAM_PORT "port"
@@ -260,8 +261,8 @@ int handle_request(int client_socket) {
     }
     buffer[bytes_read] = '\0';
 
-    char request[100];
-    char http_version[100];
+    char request[MAX_PATH_LENGTH];
+    char http_version[SMALL_BUFF_SIZE];
     char path[MAX_PATH_LENGTH];
     if (sscanf((char *)buffer, "%s %s %s", request, path, http_version) != 3) {
         fprintf(stderr, "ERROR: reading request: %s\n", buffer);
@@ -366,7 +367,6 @@ static void read_cb(struct ev_loop *loop, ev_io *watcher, int revents) {
 }
 
 static void accept_cb(struct ev_loop *loop, ev_io *watcher, int revents) {
-    static unsigned int req_id = 0;
     int client_sd = accept(watcher->fd, NULL, NULL);
 
     if (client_sd > 0) {
