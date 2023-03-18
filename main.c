@@ -28,8 +28,6 @@
 #define DEFAULT_CPU_LIMIT 1
 #define DEFAULT_ROOT_DIR "/var/www/html"
 
-#define DELAY_SEND_AGAIN_MS 5
-
 #define GET "GET"
 #define POST "POST"
 #define HEAD "HEAD"
@@ -38,6 +36,8 @@
 
 #define OK 0
 
+static int number_worker = 0;
+static int counter = 0;
 static struct st_conf {
     int port;
     int cpu_limit;
@@ -342,10 +342,6 @@ int handle_request(int client_socket) {
             curr_sent = sendfile(client_socket, file_fd, NULL, content_length);
 
             if (curr_sent == -1) {
-                if (errno == EAGAIN) {
-                    usleep(DELAY_SEND_AGAIN_MS);
-                    continue;
-                }
                 break;
             }
             bytes_sent += curr_sent;
@@ -370,8 +366,6 @@ static void accept_cb(struct ev_loop *loop, ev_io *watcher, int revents) {
     int client_sd = accept(watcher->fd, NULL, NULL);
 
     if (client_sd > 0) {
-        fcntl(client_sd, F_SETFL, fcntl(client_sd, F_GETFL, 0) | O_NONBLOCK);
-
         ev_io *client_watcher = calloc(1, sizeof(*client_watcher));
         if (client_watcher == NULL) {
             close(client_sd);
@@ -381,6 +375,7 @@ static void accept_cb(struct ev_loop *loop, ev_io *watcher, int revents) {
         ev_io_start(loop, client_watcher);
     }
 }
+
 
 int main() {
     struct ev_loop *loop = ev_default_loop(0);
@@ -417,16 +412,21 @@ int main() {
 
     printf("Count workers %d...\n", cfg.cpu_limit);
     printf("Running on port %d...\n", cfg.port);
-    for (int i = 0; i < cfg.cpu_limit; ++i) {
+    int i = 0;
+    for (; i < cfg.cpu_limit; ++i) {
         int pid = fork();
         if (pid == -1) {
             return -1;
         }
 
+        srand(time(NULL));
+
         if (pid == 0) {
             ev_io watcher = {0};
             ev_io_init(&watcher, accept_cb, server_socket, EV_READ);
             ev_io_start(loop, &watcher);
+
+            number_worker = rand()%50;
             ev_run(loop, 0);
             ev_loop_destroy(loop);
             exit(EXIT_SUCCESS);

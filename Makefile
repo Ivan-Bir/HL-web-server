@@ -30,10 +30,10 @@ run-nginx:
 	docker run --rm -p 8000:8000 --name nginx -t nginx
 
 perf-nginx:
-	ab -n 10000 -c 10 127.0.0.1:8000/httptest/wikipedia_russia.html
+	wrk -t12 -c400 -d30s http://127.0.0.1:8000/httptest/wikipedia_russia.html
 
 perf-server:
-	ab -n 10000 -c 10 127.0.0.1:80/httptest/wikipedia_russia.html
+	wrk -t12 -c400 -d30s http://127.0.0.1:80/httptest/wikipedia_russia.html
 
 func:
 	./httptest.py
