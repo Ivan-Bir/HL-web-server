@@ -12,7 +12,6 @@
 #include <sys/stat.h>
 #include <limits.h>
 #include <fcntl.h>
-#include <time.h>
 
 #define MAX_BUFFER_SIZE 1024
 #define MAX_LINE_LENGTH 1024
@@ -36,8 +35,6 @@
 
 #define OK 0
 
-static int number_worker = 0;
-static int counter = 0;
 static struct st_conf {
     int port;
     int cpu_limit;
@@ -419,14 +416,11 @@ int main() {
             return -1;
         }
 
-        srand(time(NULL));
-
         if (pid == 0) {
             ev_io watcher = {0};
             ev_io_init(&watcher, accept_cb, server_socket, EV_READ);
             ev_io_start(loop, &watcher);
 
-            number_worker = rand()%50;
             ev_run(loop, 0);
             ev_loop_destroy(loop);
             exit(EXIT_SUCCESS);
